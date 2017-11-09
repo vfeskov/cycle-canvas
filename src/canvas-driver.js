@@ -433,29 +433,25 @@ export function makeCanvasDriver (selector, canvasSize = null) {
   return driver
 }
 
-export function makeDynamicHostCanvasDriver () {
-  let driver = function dynamicHostCanvasDriver (sink$) {
-    sink$.addListener({
-      next: ({hostCanvas, rootElement}) => {
-        const context = hostCanvas.getContext('2d')
+export function canvasDriver (sink$) {
+  sink$.addListener({
+    next: ({hostCanvas, rootElement}) => {
+      const context = hostCanvas.getContext('2d')
 
-        const rootElementWithDefaults = getRootElementWithDefaults(hostCanvas, rootElement)
+      const rootElementWithDefaults = getRootElementWithDefaults(hostCanvas, rootElement)
 
-        const instructions = translateVtreeToInstructions(rootElementWithDefaults)
+      const instructions = translateVtreeToInstructions(rootElementWithDefaults)
 
-        renderInstructionsToCanvas(instructions, context)
-      },
-      error: e => { throw e },
-      complete: () => null
-    })
+      renderInstructionsToCanvas(instructions, context)
+    },
+    error: e => { throw e },
+    complete: () => null
+  })
 
-    return adapt(xs.empty())
-  }
-
-  return driver
+  return adapt(xs.empty())
 }
 
-function getRootElementWithDefaults(hostCanvas, rootElement) {
+function getRootElementWithDefaults (hostCanvas, rootElement) {
   const defaults = {
     kind: 'rect',
     x: 0,

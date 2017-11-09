@@ -64,13 +64,13 @@ Looks like this:
 
 ![img](http://i.imgur.com/1LCZxrg.png)
 
-<a id="makeDynamicHostCanvasDriverExample"></a>
+<a id="canvasDriverExample"></a>
 Or in case the canvas element appears later, for example, when it's created by DOM driver:
 
 ```jsx
 import {run} from '@cycle/rxjs-run';
 import {makeDOMDriver} from '@cycle/dom'
-import {makeDynamicHostCanvasDriver, rect} from 'cycle-canvas';
+import {canvasDriver, rect} from 'cycle-canvas';
 import {Observable} from 'rxjs'
 
 function main (sources) {
@@ -94,7 +94,7 @@ function main (sources) {
 
 const drivers = {
   DOM: makeDOMDriver('body'),
-  Canvas: makeDynamicHostCanvasDriver()
+  Canvas: canvasDriver
 };
 
 run(main, drivers);
@@ -109,7 +109,7 @@ You can find the source for flappy bird [here](https://github.com/cyclejs-commun
 #### Creating a canvas driver
 
 - [`makeCanvasDriver`](#makeCanvasDriver)
-- [`makeDynamicHostCanvasDriver`](#makeDynamicHostCanvasDriver)
+- [`canvasDriver`](#canvasDriver)
 
 #### Drawing shapes and text
 
@@ -181,20 +181,20 @@ const drivers = {
 run(main, drivers);
 ```
 
-### <a id="makeDynamicHostCanvasDriver"></a> `makeDynamicHostCanvasDriver()`
+### <a id="canvasDriver"></a> `canvasDriver`
 
-An alternative factory for the canvas driver function.
+An alternative canvas driver function to be used directly without a factory.
 
-Does not take any arguments, but requires events in the sink to be of this format:
+It requires events in the sink to be of this format:
 ```js
 {
-  hostCanvas
-  rootElement
+  hostCanvas: hostCanvas,
+  rootElement: rootElement
 }
 ```
 where `hostCanvas` is a `<canvas>` DOM element and `rootElement` is the element to draw on the `hostCanvas`.
 
-You can find an [example](#makeDynamicHostCanvasDriverExample) at the top.
+You can find an [example](#canvasDriverExample) at the top.
 
 ## Drawing shapes and text
 

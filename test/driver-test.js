@@ -1,5 +1,5 @@
 /* globals describe, it */
-import {translateVtreeToInstructions, renderInstructionsToCanvas, rect, line, arc, text, polygon, image, makeCanvasDriver, makeDynamicHostCanvasDriver} from '../src/canvas-driver'
+import {translateVtreeToInstructions, renderInstructionsToCanvas, rect, line, arc, text, polygon, image, makeCanvasDriver, canvasDriver} from '../src/canvas-driver'
 import assert from 'assert'
 import root from 'window-or-global'
 import {JSDOM} from 'jsdom'
@@ -12,7 +12,7 @@ function methodSpy () {
   const stub = (...args) => {
     called += 1
     callArgs.push(args)
-  };
+  }
 
   stub.callCount = () => called
   stub.callArgs = () => callArgs
@@ -964,8 +964,8 @@ describe('canvasDriver', () => {
     })
   })
 
-  describe('makeDynamicHostCanvasDriver', () => {
-    it('produces a canvas driver, a sink to which must emit hostCanvas DOM element along with rootElement to draw on that canvas', () => {
+  describe('canvasDriver', () => {
+    it('is a canvas driver function, a sink to which must emit hostCanvas DOM element along with rootElement to draw on that hostCanvas', () => {
       const jsdom = new JSDOM('<!DOCTYPE html><html><body><canvas width="100" height="100"></canvas></body></html>')
 
       const actualContextOperations = []
@@ -987,7 +987,7 @@ describe('canvasDriver', () => {
         rootElement
       })
 
-      makeDynamicHostCanvasDriver()(vcanvas$)
+      canvasDriver(vcanvas$)
 
       const expectedContextOperations = [
         {call: 'save', args: []},
@@ -1001,7 +1001,7 @@ describe('canvasDriver', () => {
     })
   })
 
-  function mockContext(operationCallback) {
+  function mockContext (operationCallback) {
     return new Proxy({}, {
       get: (_, methodName) => {
         return (...args) => operationCallback({
